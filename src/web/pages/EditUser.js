@@ -87,7 +87,7 @@ const EditUser = () => {
             .catch(function (error) {
                 console.log(error);
             });
-        navigate("/dashbord");
+        navigate(-1);
     };
 
     if (params !== user.username) return <Error />;

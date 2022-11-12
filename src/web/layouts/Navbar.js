@@ -45,26 +45,28 @@ const Navbar = () => {
     };
 
     useEffect(() => {
-        axios({
-            method: "post",
-            url: "http://localhost:4000/user/me",
-            headers: {
-                auth: `ut ${myCookie}`,
-            },
-        })
-            .then(function (response) {
-                setUser(response.data);
+        if (myCookie) {
+            axios({
+                method: "post",
+                url: "http://localhost:4000/user/me",
+                headers: {
+                    auth: `ut ${myCookie}`,
+                },
             })
-            .catch(function (error) {
-                console.log("lol");
-            });
+                .then(function (response) {
+                    setUser(response.data);
+                })
+                .catch(function (error) {
+                    console.log("*******");
+                });
+        }
         setLoading(true);
     }, []);
 
     if (!loading) return <LoadingLayout />;
 
     return (
-        <div>
+        <div className="z-40">
             {menu && (
                 <div
                     onClick={backdrop}
@@ -112,7 +114,7 @@ const Navbar = () => {
                         </li>
                         <li>
                             <NavLink
-                                to="top-writers"
+                                to="writers"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "block px-2 bg-gray-700"
@@ -120,7 +122,7 @@ const Navbar = () => {
                                 }
                             >
                                 <span className="block py-2 px-4 text-sm text-gray-400 hover:bg-gray-700">
-                                    Top Writers
+                                    Writers
                                 </span>
                             </NavLink>
                         </li>
@@ -138,6 +140,22 @@ const Navbar = () => {
                                 </span>
                             </NavLink>
                         </li>
+                        {myCookie && (
+                            <li>
+                                <NavLink
+                                    to="new-post"
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "block px-2 text-sm bg-gray-700"
+                                            : undefined
+                                    }
+                                >
+                                    <span className="block py-2 px-4 text-sm text-gray-400 hover:bg-gray-700">
+                                        Add Post
+                                    </span>
+                                </NavLink>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </div>
@@ -168,7 +186,7 @@ const Navbar = () => {
                                     ? "bg-gray-600 text-white pt-3 pb-2 rounded mx-0 transition-all"
                                     : undefined
                             }
-                            to="top-writers"
+                            to="writers"
                         >
                             <span className="px-3 text-[1.5rem] hover:text-white inline-block">
                                 <MdOutlineSpeakerNotes />
@@ -193,7 +211,7 @@ const Navbar = () => {
                                         ? "bg-gray-600 text-white pt-3 pb-1 rounded mx-0 transition-all"
                                         : undefined
                                 }
-                                to={`${user.username}/new-post`}
+                                to={`new-post`}
                             >
                                 <span className="px-3 text-[1.5rem] hover:text-white inline-block">
                                     <BsPlusLg title="Create New Post" />
@@ -238,10 +256,14 @@ const Navbar = () => {
                                         <ul>
                                             <li>
                                                 <Link
-                                                    to={user.username}
+                                                    to={
+                                                        user._id +
+                                                        "/" +
+                                                        user.username
+                                                    }
                                                     className="block py-2 px-4 text-sm text-gray-100 hover:bg-gray-700"
                                                 >
-                                                    Dashboard
+                                                    My Page
                                                 </Link>
                                             </li>
                                             <li>
