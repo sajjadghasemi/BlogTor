@@ -1,24 +1,22 @@
 import { Link, NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CgMenuRightAlt } from "react-icons/cg";
 import { FaTimes } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { MdOutlineSpeakerNotes } from "react-icons/md";
 import { MdTravelExplore } from "react-icons/md";
 import { SiBloglovin } from "react-icons/si";
-import { Cookies } from "react-cookie";
-import axios from "axios";
-import LoadingLayout from "./LoadingLayout";
 import { BsPlusLg } from "react-icons/bs";
+import { useSelector, useDispatch } from "react-redux";
+import { authAction } from "../../store/auth-slice";
 
 const Navbar = () => {
     const [dropdown, setDropdown] = useState(false);
     const [menu, setMenu] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [user, setUser] = useState("");
 
-    const cookies = new Cookies();
-    const myCookie = cookies.get("token");
+    const dispatch = useDispatch();
+
+    const user = useSelector((state) => state.auth.user);
 
     const handleDropdown = () => {
         setDropdown(!dropdown);
@@ -41,29 +39,8 @@ const Navbar = () => {
     };
 
     const handleLogout = () => {
-        cookies.remove("token");
+        dispatch(authAction.logout());
     };
-
-    useEffect(() => {
-        if (myCookie) {
-            axios({
-                method: "post",
-                url: "http://localhost:4000/user/me",
-                headers: {
-                    auth: `ut ${myCookie}`,
-                },
-            })
-                .then(function (response) {
-                    setUser(response.data);
-                })
-                .catch(function (error) {
-                    console.log("*******");
-                });
-        }
-        setLoading(true);
-    }, []);
-
-    if (!loading) return <LoadingLayout />;
 
     return (
         <div className="z-40">
@@ -140,7 +117,7 @@ const Navbar = () => {
                                 </span>
                             </NavLink>
                         </li>
-                        {myCookie && (
+                        {user && (
                             <li>
                                 <NavLink
                                     to="new-post"
@@ -159,7 +136,7 @@ const Navbar = () => {
                     </ul>
                 </div>
             </div>
-            <nav className="w-full bg-gray-700 text-[#c4c4c4] px-3 py-4 fixed top-0 sticky">
+            <nav className="w-full bg-gray-800 text-[#c4c4c4] px-3 py-4 top-0 sticky">
                 <div className="flex justify-between">
                     <div className="ml-3 text-md md:text-[2rem]">
                         <Link to="/" className="hover:text-white">
@@ -204,7 +181,7 @@ const Navbar = () => {
                                 <MdTravelExplore />
                             </span>
                         </NavLink>
-                        {myCookie && (
+                        {user && (
                             <NavLink
                                 className={({ isActive }) =>
                                     isActive
@@ -220,13 +197,14 @@ const Navbar = () => {
                         )}
                     </div>
                     <div className="text-md md:text-xl flex">
-                        {!myCookie ? (
+                        {!user && (
                             <Link to="sign">
                                 <span className="bg-white text-[.6rem] md:text-sm border-2 border-[#d8d6d0] text-gray-800 px-3 py-2 rounded hover:bg-[#d8d6d0] hover:text-gray-700 hover:border-2 hover:border-white duration-200">
                                     Sign in | Sign Up
                                 </span>
                             </Link>
-                        ) : (
+                        )}{" "}
+                        {user && (
                             <div className="flex flex-col">
                                 {" "}
                                 <button
@@ -288,7 +266,6 @@ const Navbar = () => {
                                 )}
                             </div>
                         )}
-
                         <div className="md:hidden flex">
                             <button
                                 onClick={handleMenu}

@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://SajjadGhasemi.github.io",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -16,6 +17,7 @@
     "react-hook-form": "^7.38.0",
     "react-html-parser": "^2.0.2",
     "react-icons": "^4.6.0",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.1",
     "react-star-ratings": "^2.3.0",

@@ -4,14 +4,14 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Cookies } from "react-cookie";
-import Error from "../layouts/Error";
+import { useDispatch } from "react-redux";
+import { authAction } from "../../store/auth-slice";
 
 const Sign = () => {
     const [signup, setSignup] = useState(false);
     const [loginError, setLoginError] = useState(false);
 
     const cookies = new Cookies();
-    const myCookie = cookies.get("token");
 
     const navigate = useNavigate();
 
@@ -26,6 +26,8 @@ const Sign = () => {
         formState: { errors: errors2 },
         handleSubmit: handleSubmit2,
     } = useForm();
+
+    const dispatch = useDispatch();
 
     const signupHandle = () => {
         setSignup(true);
@@ -43,6 +45,7 @@ const Sign = () => {
             })
             .then((res) => {
                 cookies.set("token", res.data.token, { path: "/" });
+                // dispatch(authAction.login());
             })
             .catch(function (error) {
                 console.log(error);
@@ -58,6 +61,7 @@ const Sign = () => {
             })
             .then((res) => {
                 cookies.set("token", res.data.token, { path: "/" });
+                // dispatch(authAction.login());
             })
             .catch(function (err) {
                 console.log(err);
@@ -65,8 +69,6 @@ const Sign = () => {
             });
         navigate("/");
     };
-
-    if (myCookie) return <Error />;
 
     return (
         <div className="sign--container flex top-[80px] md:mx-auto md:w-[700px]">

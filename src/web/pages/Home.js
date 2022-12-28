@@ -53,6 +53,31 @@ const Home = () => {
                     </div>
                 </Link>
             ))}
+            {blogs.map((item, i) => (
+                <Link
+                    key={i}
+                    className="flex flex-col justify-center hover:shadow-2xl"
+                    to={`${item._id}`}
+                >
+                    <div className="h-[270px] w-[270px] relative">
+                        <img
+                            className="p-1 h-full w-full object-cover cursor-pointer"
+                            src={item.imgurl ? item.imgurl : "/userAvatar.png"}
+                        />
+                        <div className="absolute text-center p-1 bottom-1 left-1 bg-black w-[16.3rem] opacity-70">
+                            <StarRatings
+                                starRatedColor="orange"
+                                numberOfStars={5}
+                                rating={
+                                    item.averageScore ? item.averageScore : 0
+                                }
+                                starDimension="23px"
+                                starSpacing="2px"
+                            />
+                        </div>
+                    </div>
+                </Link>
+            ))}
         </div>
     );
 };
